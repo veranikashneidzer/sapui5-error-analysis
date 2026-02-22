@@ -51,6 +51,7 @@
 						growingScrollToLoad="true"
 						noDataText="{worklistView>/tableNoDataText}"
 						updateFinished=".onUpdateFinished"
+						selectionChange=".onSelectListItem"
 						width="auto"
 						mode="MultiSelect"
 						items="{
@@ -134,10 +135,16 @@
 			<semantic:SendEmailAction id="shareEmail" press=".onShareEmailPress"/>
 		</semantic:sendEmailAction>
 		<semantic:positiveAction>
-			<semantic:PositiveAction text="{i18n>TableProductsReorder}" press=".onUpdateStockObjects"/>
+			<semantic:PositiveAction
+				text="{i18n>TableProductsReorder}"
+				press=".onUpdateStockObjects"
+				enabled="{worklistView>/isActionButtonEnabled}"/>
 		</semantic:positiveAction>
 		<semantic:negativeAction>
-			<semantic:NegativeAction text="{i18n>TablePorductsUnlist}" press=".onUnlistObjects"/>
+			<semantic:NegativeAction
+				text="{i18n>TablePorductsUnlist}"
+				press=".onUnlistObjects"
+				enabled="{worklistView>/isActionButtonEnabled}"/>
 		</semantic:negativeAction>
 	</semantic:SemanticPage>
 </mvc:View>

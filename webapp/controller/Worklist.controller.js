@@ -42,7 +42,8 @@ sap.ui.define([
 					inStock: 0,
 					shortage: 0,
 					outOfStock: 0,
-					countAll: 0
+					countAll: 0,
+					isActionButtonEnabled: false,
 				});
 				this.setModel(oViewModel, "worklistView");
 
@@ -259,6 +260,11 @@ sap.ui.define([
 				} else {
 					this._showErrorMessage(this.getModel("i18n").getResourceBundle().getText("TableSelectProduct"));
 				}
+			},
+
+			onSelectListItem() {
+				const aSelectedProducts = this.byId("table").getSelectedItems().length;
+				this.getModel("worklistView").setProperty("/isActionButtonEnabled", aSelectedProducts > 0);
 			}
         });
     });
