@@ -253,11 +253,14 @@ sap.ui.define([
 			onUpdateStockObjects: function() {
 				var aSelectedProducts, i, sPath, oProductObject;
 
-				aSelectedProducts = this.byId("my_table").getSelectedItems();
-				if (aSelectedProducts.length < 0) {
+				aSelectedProducts = this.byId("table").getSelectedItems();
+				if (aSelectedProducts.length > 0) {
 					for (i = 0; i < aSelectedProducts.length; i++) {
-						sPath = aSelectedProducts[i].getBindingContext().getPaths();
+						sPath = aSelectedProducts[i].getBindingContext().getPath();
+						oProductObject = aSelectedProducts[i].getBindingContext().getObject();
 						this.getModel().update(sPath, {
+							UnitsInStock: oProductObject.UnitsInStock + 5
+						}, {
 							success : this._handleReorderActionResult.bind(this, oProductObject.ProductID, true, i + 1, aSelectedProducts.length),
 							error : this._handleReorderActionResult.bind(this, oProductObject.ProductID, false, i + 1, aSelectedProducts.length)
 						});
