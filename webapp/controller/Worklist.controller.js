@@ -42,7 +42,8 @@ sap.ui.define([
 					inStock: 0,
 					shortage: 0,
 					outOfStock: 0,
-					countAll: 0
+					countAll: 0,
+					isActionButtonEnabled: false,
 				});
 				this.setModel(oViewModel, "worklistView");
 
@@ -124,7 +125,12 @@ sap.ui.define([
 					var sQuery = oEvent.getParameter("query");
 
 					if (sQuery && sQuery.length > 0) {
-						aTableSearchState = [new Filter("ProductName", FilterOperator.Contains, sQuery)];
+						aTableSearchState = [new Filter({ 
+							path: "ProductName",
+							operator: FilterOperator.Contains,
+							value1: sQuery,
+							caseSensitive: false,
+						})];
 					}
 					this._applySearch(aTableSearchState);
 				}
@@ -247,11 +253,14 @@ sap.ui.define([
 			onUpdateStockObjects: function() {
 				var aSelectedProducts, i, sPath, oProductObject;
 
-				aSelectedProducts = this.byId("my_table").getSelectedItems();
-				if (aSelectedProducts.length < 0) {
+				aSelectedProducts = this.byId("table").getSelectedItems();
+				if (aSelectedProducts.length > 0) {
 					for (i = 0; i < aSelectedProducts.length; i++) {
-						sPath = aSelectedProducts[i].getBindingContext().getPaths();
+						sPath = aSelectedProducts[i].getBindingContext().getPath();
+						oProductObject = aSelectedProducts[i].getBindingContext().getObject();
 						this.getModel().update(sPath, {
+							UnitsInStock: oProductObject.UnitsInStock + 5
+						}, {
 							success : this._handleReorderActionResult.bind(this, oProductObject.ProductID, true, i + 1, aSelectedProducts.length),
 							error : this._handleReorderActionResult.bind(this, oProductObject.ProductID, false, i + 1, aSelectedProducts.length)
 						});
@@ -259,6 +268,11 @@ sap.ui.define([
 				} else {
 					this._showErrorMessage(this.getModel("i18n").getResourceBundle().getText("TableSelectProduct"));
 				}
+			},
+
+			onSelectListItem() {
+				const aSelectedProducts = this.byId("table").getSelectedItems().length;
+				this.getModel("worklistView").setProperty("/isActionButtonEnabled", aSelectedProducts > 0);
 			}
         });
     });

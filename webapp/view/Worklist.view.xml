@@ -28,7 +28,7 @@
 						key="inStock"
 						icon="sap-icon://message-success"
 						iconColor="Positive"
-						count="{worklistView>/inStocks}"
+						count="{worklistView>/inStock}"
 						text="{i18n>WorklistFilterInStock}"/>
 					<IconTabFilter
 						key="shortage"
@@ -40,7 +40,7 @@
 						key="outOfStock"
 						icon="sap-icon://message-error"
 						iconColor="Negative"
-						count="{worklistView>/outOfStocks}"
+						count="{worklistView>/outOfStock}"
 						text="{i18n>WorklistFilterOutOfStock}"/>
 				</items>
 				<content>
@@ -51,6 +51,7 @@
 						growingScrollToLoad="true"
 						noDataText="{worklistView>/tableNoDataText}"
 						updateFinished=".onUpdateFinished"
+						selectionChange=".onSelectListItem"
 						width="auto"
 						mode="MultiSelect"
 						items="{
@@ -134,10 +135,16 @@
 			<semantic:SendEmailAction id="shareEmail" press=".onShareEmailPress"/>
 		</semantic:sendEmailAction>
 		<semantic:positiveAction>
-			<semantic:PositiveAction text="{i18n>TableProductsReorder}" press=".onUpdateStockObjects"/>
+			<semantic:PositiveAction
+				text="{i18n>TableProductsReorder}"
+				press=".onUpdateStockObjects"
+				enabled="{worklistView>/isActionButtonEnabled}"/>
 		</semantic:positiveAction>
 		<semantic:negativeAction>
-			<semantic:NegativeAction text="{i18n>TablePorductsUnlist}" press=".onUnlistObjects"/>
+			<semantic:NegativeAction
+				text="{i18n>TablePorductsUnlist}"
+				press=".onUnlistObjects"
+				enabled="{worklistView>/isActionButtonEnabled}"/>
 		</semantic:negativeAction>
 	</semantic:SemanticPage>
 </mvc:View>
